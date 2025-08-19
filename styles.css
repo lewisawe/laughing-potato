@@ -452,52 +452,69 @@ body {
     left: 120px;
     background-color: #3c3c3c;
     border: 1px solid #555;
-    border-radius: 5px;
-    max-height: 150px;
+    border-radius: 3px;
+    max-height: 120px;
     overflow-y: auto;
     z-index: 1000;
     display: none;
-    min-width: 300px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideDown 0.2s ease-out;
+    min-width: 250px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.15s ease-out;
+    font-size: 11px;
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
+    from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .autocomplete-item {
-    padding: 8px 12px;
+    padding: 4px 8px;
     cursor: pointer;
     border-bottom: 1px solid #555;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    line-height: 1.2;
 }
 
 .autocomplete-item:hover,
 .autocomplete-item.selected {
     background-color: #4CAF50;
-    transform: translateX(5px);
+    transform: none;
 }
 
 .autocomplete-item:last-child {
     border-bottom: none;
 }
 
-.autocomplete-item .shortcut {
-    font-size: 10px;
+.autocomplete-item .command-suggestion {
     color: #999;
+    font-style: italic;
+    margin-left: 8px;
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.autocomplete-item .shortcut {
+    font-size: 9px;
+    color: #888;
     background-color: #555;
-    padding: 2px 6px;
-    border-radius: 3px;
+    padding: 1px 4px;
+    border-radius: 2px;
+    opacity: 0.7;
 }
 
 .autocomplete-item.selected .shortcut {
     background-color: #2e7d32;
     color: #fff;
+    opacity: 1;
+}
+
+.autocomplete-item.selected .command-suggestion {
+    color: #e8f5e8;
+    opacity: 1;
 }
 
 /* Command suggestions */

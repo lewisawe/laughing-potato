@@ -152,12 +152,17 @@ function showAutocomplete(input) {
     }
 
     autocompleteDropdown.innerHTML = '';
-    matches.forEach((match, index) => {
+    matches.slice(0, 6).forEach((match, index) => { // Limit to 6 items to reduce clutter
         const item = document.createElement('div');
         item.className = 'autocomplete-item';
         
         const commandSpan = document.createElement('span');
         commandSpan.textContent = match.cmd;
+        
+        const rightSide = document.createElement('div');
+        rightSide.style.display = 'flex';
+        rightSide.style.alignItems = 'center';
+        rightSide.style.gap = '6px';
         
         const descSpan = document.createElement('span');
         descSpan.className = 'command-suggestion';
@@ -167,9 +172,11 @@ function showAutocomplete(input) {
         shortcutSpan.className = 'shortcut';
         shortcutSpan.textContent = match.shortcut;
         
+        rightSide.appendChild(descSpan);
+        rightSide.appendChild(shortcutSpan);
+        
         item.appendChild(commandSpan);
-        item.appendChild(descSpan);
-        item.appendChild(shortcutSpan);
+        item.appendChild(rightSide);
         
         item.addEventListener('click', () => {
             commandInput.value = match.cmd;
@@ -335,12 +342,73 @@ You discovered the secret code: ${
         addToOutput(`<div class="achievement">${achievement.icon} ACHIEVEMENT: ${achievement.name}! (${achievement.description})</div>`);
     });
     
-    // Add reset button
-    const resetBtn = document.createElement('button');
-    resetBtn.className = 'reset-button';
-    resetBtn.textContent = 'Start New Hunt';
-    resetBtn.onclick = resetGame;
-    output.appendChild(resetBtn);
+    // Determine next difficulty level
+    const difficultyOrder = ['beginner', 'intermediate', 'advanced', 'expert'];
+    const currentIndex = difficultyOrder.indexOf(currentDifficulty);
+    const nextDifficulty = difficultyOrder[currentIndex + 1];
+    
+    if (nextDifficulty) {
+        // There's a next level - show advancement option
+        addToOutput(`
+<div class="congratulations">
+🚀 Ready for the next challenge?
+</div>`, 'success');
+        
+        const advanceBtn = document.createElement('button');
+        advanceBtn.className = 'reset-button';
+        advanceBtn.textContent = `Advance to ${nextDifficulty.charAt(0).toUpperCase() + nextDifficulty.slice(1)} Level`;
+        advanceBtn.onclick = () => advanceToNextLevel(nextDifficulty);
+        output.appendChild(advanceBtn);
+        
+        const stayBtn = document.createElement('button');
+        stayBtn.className = 'hint-button';
+        stayBtn.textContent = `Replay ${currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)} Level`;
+        stayBtn.onclick = resetGame;
+        output.appendChild(stayBtn);
+    } else {
+        // This is the final level (Expert)
+        addToOutput(`
+<div class="congratulations">
+🏆 ULTIMATE MASTER! 🏆
+You have conquered all difficulty levels!
+You are now a certified AWS CLI Expert!
+</div>`, 'success');
+        
+        const resetBtn = document.createElement('button');
+        resetBtn.className = 'reset-button';
+        resetBtn.textContent = 'Start New Hunt (Beginner)';
+        resetBtn.onclick = () => {
+            currentDifficulty = 'beginner';
+            updateDifficultyButtons();
+            resetGame();
+        };
+        output.appendChild(resetBtn);
+    }
+}
+
+function advanceToNextLevel(nextDifficulty) {
+    currentDifficulty = nextDifficulty;
+    updateDifficultyButtons();
+    resetGame();
+    
+    // Show advancement message
+    setTimeout(() => {
+        addToOutput(`
+<div class="congratulations">
+🎯 Welcome to ${nextDifficulty.toUpperCase()} Level!
+The challenges ahead are more complex and require deeper AWS CLI knowledge.
+Good luck, and may your commands be swift and accurate!
+</div>`, 'success');
+    }, 500);
+}
+
+function updateDifficultyButtons() {
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.level === currentDifficulty) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function processCommand(command) {

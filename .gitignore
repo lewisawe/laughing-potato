@@ -231,6 +231,11 @@ performance-reports/
 # Custom Project Files
 # ===========================
 
+# Development and test versions
+idea.txt
+aws-cli-simulator.html
+aws-cli-simulator-enhanced.html
+
 # User customizations
 user-config.js
 custom-themes.css
