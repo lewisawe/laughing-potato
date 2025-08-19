@@ -2,6 +2,14 @@
 
 // AWS CLI commands for autocomplete with descriptions and shortcuts
 const awsCommands = [
+    // Common AWS Utility Commands
+    { cmd: 'aws --version', desc: 'Show AWS CLI version', shortcut: 'Tab' },
+    { cmd: 'aws --help', desc: 'Show AWS CLI help', shortcut: 'Tab' },
+    { cmd: 'aws configure list', desc: 'Show current configuration', shortcut: 'Tab' },
+    { cmd: 'aws configure get region', desc: 'Get current region', shortcut: 'Tab' },
+    { cmd: 'aws sts get-caller-identity', desc: 'Get current user identity', shortcut: 'Tab' },
+    { cmd: 'aws sts get-session-token', desc: 'Get temporary credentials', shortcut: 'Tab' },
+    
     // S3 Commands
     { cmd: 'aws s3 ls', desc: 'List S3 buckets', shortcut: 'Tab' },
     { cmd: 'aws s3 ls s3://', desc: 'List bucket contents', shortcut: 'Tab' },
@@ -28,6 +36,8 @@ const awsCommands = [
     { cmd: 'aws iam list-roles', desc: 'List IAM roles', shortcut: 'Tab' },
     { cmd: 'aws iam get-role --role-name ', desc: 'Get IAM role', shortcut: 'Tab' },
     { cmd: 'aws iam list-attached-role-policies --role-name ', desc: 'List role policies', shortcut: 'Tab' },
+    { cmd: 'aws iam get-user', desc: 'Get current user info', shortcut: 'Tab' },
+    { cmd: 'aws iam get-account-summary', desc: 'Get account summary', shortcut: 'Tab' },
     
     // Lambda Commands
     { cmd: 'aws lambda list-functions', desc: 'List Lambda functions', shortcut: 'Tab' },
@@ -52,6 +62,8 @@ const awsCommands = [
     { cmd: 'aws ec2 describe-security-groups', desc: 'List security groups', shortcut: 'Tab' },
     { cmd: 'aws ec2 describe-vpcs', desc: 'List VPCs', shortcut: 'Tab' },
     { cmd: 'aws ec2 describe-subnets', desc: 'List subnets', shortcut: 'Tab' },
+    { cmd: 'aws ec2 describe-regions', desc: 'List AWS regions', shortcut: 'Tab' },
+    { cmd: 'aws ec2 describe-availability-zones', desc: 'List availability zones', shortcut: 'Tab' },
     
     // CloudFormation Commands
     { cmd: 'aws cloudformation list-stacks', desc: 'List CloudFormation stacks', shortcut: 'Tab' },
@@ -61,6 +73,10 @@ const awsCommands = [
     // Secrets Manager Commands
     { cmd: 'aws secretsmanager list-secrets', desc: 'List secrets', shortcut: 'Tab' },
     { cmd: 'aws secretsmanager get-secret-value --secret-id ', desc: 'Get secret value', shortcut: 'Tab' },
+    
+    // KMS Commands
+    { cmd: 'aws kms list-keys', desc: 'List KMS keys', shortcut: 'Tab' },
+    { cmd: 'aws kms describe-key --key-id ', desc: 'Describe KMS key', shortcut: 'Tab' },
     
     // System Commands
     { cmd: 'cat clue.txt', desc: 'Display file contents', shortcut: 'Tab' },
@@ -573,5 +589,97 @@ drwxr-xr-x 15 user user 4096 Aug 19 20:20 ..
     
     uptime: `20:23:47 up 2:15, 1 user, load average: 0.08, 0.12, 0.09`,
     
-    uname: `Linux cli-hunt 5.15.0-aws x86_64 GNU/Linux`
+    uname: `Linux cli-hunt 5.15.0-aws x86_64 GNU/Linux`,
+
+    // AWS Utility Commands
+    'aws --version': `aws-cli/2.13.25 Python/3.11.5 Linux/5.15.0-aws exe/x86_64.ubuntu.22 prompt/off`,
+    
+    'aws --help': `usage: aws [--version] [--debug] [--endpoint-url <value>]
+            [--no-verify-ssl] [--no-paginate] [--output <value>]
+            [--query <value>] [--profile <value>] [--region <value>]
+            [--version] [--color <value>] [--no-sign-request]
+            [--ca-bundle <value>] [--cli-read-timeout <value>]
+            [--cli-connect-timeout <value>]
+
+The AWS Command Line Interface (CLI) is a unified tool to manage your AWS services.
+
+Available services:
+• s3              • iam             • lambda          • ssm
+• dynamodb        • ec2             • cloudformation  • secretsmanager
+• logs            • cloudwatch      • kms             • sts
+
+For service-specific help: aws <service> help`,
+
+    'aws configure list': `      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile                <not set>             None    None
+access_key     ****************ABCD shared-credentials-file    
+secret_key     ****************WXYZ shared-credentials-file    
+    region                us-east-1      config-file    ~/.aws/config`,
+
+    'aws configure get region': `us-east-1`,
+
+    'aws sts get-caller-identity': `{
+    "UserId": "AIDACKCEVSQ6C2EXAMPLE",
+    "Account": "123456789012",
+    "Arn": "arn:aws:iam::123456789012:user/cli-hunter"
+}`,
+
+    'aws sts get-session-token': `{
+    "Credentials": {
+        "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+        "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        "SessionToken": "AQoDYXdzEJr...<remainder of security token>",
+        "Expiration": "2023-08-19T23:00:00.000Z"
+    }
+}`,
+
+    'aws iam get-user': `{
+    "User": {
+        "Path": "/",
+        "UserName": "cli-hunter",
+        "UserId": "AIDACKCEVSQ6C2EXAMPLE",
+        "Arn": "arn:aws:iam::123456789012:user/cli-hunter",
+        "CreateDate": "2023-08-19T10:00:00.000Z"
+    }
+}`,
+
+    'aws iam get-account-summary': `{
+    "SummaryMap": {
+        "Users": 5,
+        "Groups": 2,
+        "Roles": 12,
+        "Policies": 8,
+        "UserPolicySizeQuota": 2048,
+        "GroupPolicySizeQuota": 5120,
+        "RolePolicySizeQuota": 10240
+    }
+}`,
+
+    'aws ec2 describe-regions': `{
+    "Regions": [
+        {"RegionName": "us-east-1", "Endpoint": "ec2.us-east-1.amazonaws.com"},
+        {"RegionName": "us-west-1", "Endpoint": "ec2.us-west-1.amazonaws.com"},
+        {"RegionName": "us-west-2", "Endpoint": "ec2.us-west-2.amazonaws.com"},
+        {"RegionName": "eu-west-1", "Endpoint": "ec2.eu-west-1.amazonaws.com"},
+        {"RegionName": "ap-southeast-1", "Endpoint": "ec2.ap-southeast-1.amazonaws.com"}
+    ]
+}`,
+
+    'aws ec2 describe-availability-zones': `{
+    "AvailabilityZones": [
+        {"ZoneName": "us-east-1a", "State": "available", "RegionName": "us-east-1"},
+        {"ZoneName": "us-east-1b", "State": "available", "RegionName": "us-east-1"},
+        {"ZoneName": "us-east-1c", "State": "available", "RegionName": "us-east-1"}
+    ]
+}`,
+
+    'aws kms list-keys': `{
+    "Keys": [
+        {"KeyId": "12345678-1234-1234-1234-123456789012"},
+        {"KeyId": "87654321-4321-4321-4321-210987654321"},
+        {"KeyId": "alias/aws/s3"},
+        {"KeyId": "alias/hunt-master-key"}
+    ]
+}`
 };

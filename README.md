@@ -1,4 +1,4 @@
-# 🔍 AWS CLI Scavenger Hunt
+# AWS CLI Scavenger Hunt
 
 An interactive web-based game that teaches AWS CLI commands through progressive challenges and real-world scenarios.
 
@@ -7,21 +7,21 @@ An interactive web-based game that teaches AWS CLI commands through progressive 
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-## 🎯 Overview
+## Overview
 
 Master AWS CLI commands through an engaging scavenger hunt that simulates real AWS environments. Navigate through multiple difficulty levels, each teaching different AWS services and advanced command-line techniques.
 
-### ✨ Key Features
+### Key Features
 
-- **🎮 Interactive CLI Simulation** - Realistic command-line interface with authentic AWS responses
-- **📈 Progressive Difficulty** - 4 levels from Beginner to Expert (25+ total challenges)
-- **🛠️ 10+ AWS Services** - S3, IAM, Lambda, DynamoDB, CloudFormation, Secrets Manager, and more
-- **💡 Smart Auto-completion** - Tab completion with command descriptions and shortcuts
-- **📚 Contextual Help** - Built-in help system with service-specific guidance
-- **🏆 Achievement System** - Earn badges for efficiency, speed, and skill
-- **📱 Responsive Design** - Works on desktop, tablet, and mobile devices
+- **Interactive CLI Simulation** - Realistic command-line interface with authentic AWS responses
+- **Progressive Difficulty** - 4 levels from Beginner to Expert (25+ total challenges)
+- **10+ AWS Services** - S3, IAM, Lambda, DynamoDB, CloudFormation, Secrets Manager, and more
+- **Smart Auto-completion** - Tab completion with command descriptions and shortcuts
+- **Contextual Help** - Built-in help system with service-specific guidance
+- **Achievement System** - Earn badges for efficiency, speed, and skill
+- **Responsive Design** - Works on desktop, tablet, and mobile devices
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: Direct Download
 1. Download all files to a local directory
@@ -46,7 +46,7 @@ npx serve .
 # Then visit http://localhost:8000
 ```
 
-## 🎮 How to Play
+## How to Play
 
 ### Getting Started
 1. **Choose your difficulty level** - Beginner, Intermediate, Advanced, or Expert
@@ -57,14 +57,14 @@ npx serve .
 
 ### Controls & Features
 - **Tab** - Auto-complete commands with descriptions
-- **↑/↓ Arrows** - Navigate command history
+- **Up/Down Arrows** - Navigate command history
 - **Ctrl+L** - Clear screen (preserves current clue)
 - **Ctrl+R** - Reset game
 - **help [topic]** - Get contextual assistance
 
-## 📚 Difficulty Levels
+## Difficulty Levels
 
-### 🟢 Beginner (6 Stages)
+### Beginner (6 Stages)
 **Perfect for AWS CLI newcomers**
 - Basic S3 operations (`aws s3 ls`, `aws s3 cp`)
 - Simple SSM parameter retrieval
@@ -72,7 +72,7 @@ npx serve .
 - **Services**: S3, SSM, IAM
 - **Estimated time**: 10-15 minutes
 
-### 🟡 Intermediate (7 Stages)
+### Intermediate (7 Stages)
 **Multi-service integration scenarios**
 - Encrypted S3 buckets and CloudTrail logs
 - Lambda function investigation
@@ -81,7 +81,7 @@ npx serve .
 - **Services**: S3, Lambda, SSM, DynamoDB, CloudTrail
 - **Estimated time**: 15-25 minutes
 
-### 🟠 Advanced (8 Stages)
+### Advanced (8 Stages)
 **Complex infrastructure analysis**
 - CloudFormation stack investigation
 - Secrets Manager integration
@@ -91,7 +91,7 @@ npx serve .
 - **Services**: CloudFormation, Secrets Manager, CloudWatch, KMS, S3, DynamoDB
 - **Estimated time**: 25-40 minutes
 
-### 🔴 Expert (3 Intensive Stages)
+### Expert (3 Intensive Stages)
 **Security incident response scenarios**
 - Advanced EC2 and VPC analysis with complex queries
 - Security group vulnerability assessment
@@ -99,7 +99,7 @@ npx serve .
 - **Services**: EC2, VPC, Secrets Manager
 - **Estimated time**: 20-30 minutes
 
-## 🛠️ AWS Services Covered
+## AWS Services Covered
 
 | Service | Commands Taught | Use Cases |
 |---------|----------------|-----------|
@@ -114,17 +114,17 @@ npx serve .
 | **KMS** | `describe-key`, `decrypt` | Encryption key management |
 | **EC2** | `describe-instances`, `describe-vpcs` | Virtual machines, networking |
 
-## 🏆 Achievement System
+## Achievement System
 
 Earn badges based on your performance:
 
-- **🏆 Perfect Navigator** - Complete with 90%+ efficiency
-- **🧠 No Hints Needed** - Complete without using any hints
-- **⚡ Speed Demon** - Complete in under 2 minutes
-- **👑 Command Master** - Complete Advanced level
-- **🎯 First Try Hero** - Get every command right on first attempt
+- **Perfect Navigator** - Complete with 90%+ efficiency
+- **No Hints Needed** - Complete without using any hints
+- **Speed Demon** - Complete in under 2 minutes
+- **Command Master** - Complete Advanced level
+- **First Try Hero** - Get every command right on first attempt
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Architecture
 - **Frontend Only** - No backend required, runs entirely in browser
@@ -144,13 +144,13 @@ CLI_skavenger_hunt/
 ```
 
 ### Browser Compatibility
-- **Chrome** 60+ ✅
-- **Firefox** 55+ ✅
-- **Safari** 12+ ✅
-- **Edge** 79+ ✅
-- **Mobile browsers** ✅
+- **Chrome** 60+
+- **Firefox** 55+
+- **Safari** 12+
+- **Edge** 79+
+- **Mobile browsers**
 
-## 🎨 Customization
+## Customization
 
 ### Adding New Levels
 1. Edit `config.js`
@@ -176,16 +176,16 @@ gameStages.yourLevel = [
 - CSS variables available for easy theme changes
 - Responsive design breakpoints included
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Here's how you can help:
 
 ### Ways to Contribute
-- 🐛 **Report bugs** - Found an issue? Let us know!
-- 💡 **Suggest features** - Ideas for new AWS services or challenges
-- 📝 **Improve documentation** - Help make instructions clearer
-- 🎮 **Add game content** - Create new levels or scenarios
-- 🎨 **Enhance UI/UX** - Improve the visual design
+- **Report bugs** - Found an issue? Let us know!
+- **Suggest features** - Ideas for new AWS services or challenges
+- **Improve documentation** - Help make instructions clearer
+- **Add game content** - Create new levels or scenarios
+- **Enhance UI/UX** - Improve the visual design
 
 ### Development Setup
 1. Fork the repository
@@ -199,23 +199,23 @@ We welcome contributions! Here's how you can help:
 3. Add help documentation
 4. Test command validation logic
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **AWS Documentation** - For accurate CLI command references
 - **Community Feedback** - Thanks to all beta testers and contributors
 - **Open Source Libraries** - Built with standard web technologies
 
-## 📞 Support
+## Support
 
 - **Issues**: Report bugs or request features via GitHub Issues
 - **Discussions**: Join community discussions for tips and tricks
 - **Documentation**: Check this README and inline help system
 
-## 🔗 Related Projects
+## Related Projects
 
 - [AWS CLI Official Documentation](https://docs.aws.amazon.com/cli/)
 - [AWS CLI Command Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
@@ -223,6 +223,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Ready to become an AWS CLI master?** 🚀 Start your scavenger hunt adventure today!
+**Ready to become an AWS CLI master?** Start your scavenger hunt adventure today!
 
-*Made with ❤️ for the AWS community*
+*Made with love for the AWS community*
