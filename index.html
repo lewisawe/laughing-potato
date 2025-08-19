@@ -10,7 +10,21 @@
     <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="lewisawe" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF5F5F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 </head>
 <body>
-    <div class="terminal">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-logo">🔍 AWS CLI</div>
+        <div class="loading-title">Scavenger Hunt</div>
+        <div class="loading-subtitle">Loading your interactive CLI adventure...</div>
+        <div class="loading-spinner"></div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+        </div>
+        <div class="loading-text">Initializing AWS CLI simulation...</div>
+    </div>
+
+    <!-- Main Game Container -->
+    <div class="game-container" id="game-container">
+        <div class="terminal">
         <div class="terminal-header">
             <div class="header-left">
                 <div class="window-controls">
@@ -51,6 +65,7 @@ List the S3 buckets to begin your quest...
                 <input type="text" id="command-input" autocomplete="off" autofocus placeholder="Type your AWS CLI command here...">
                 <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
             </div>
+        </div>
         </div>
     </div>
 

@@ -675,3 +675,55 @@ commandInput.addEventListener('keydown', function(e) {
         resetGame();
     }
 });
+
+// Initialize game
+updateProgress();
+// Don't automatically focus - let user click when ready
+
+// Loading Screen Logic
+document.addEventListener('DOMContentLoaded', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    const gameContainer = document.getElementById('game-container');
+    const loadingText = document.querySelector('.loading-text');
+    
+    // Loading messages sequence
+    const loadingMessages = [
+        'Initializing AWS CLI simulation...',
+        'Loading AWS services...',
+        'Setting up S3 buckets...',
+        'Configuring IAM policies...',
+        'Preparing Lambda functions...',
+        'Finalizing game environment...',
+        'Ready to start your adventure!'
+    ];
+    
+    let messageIndex = 0;
+    
+    // Update loading text every 400ms
+    const messageInterval = setInterval(() => {
+        if (messageIndex < loadingMessages.length) {
+            loadingText.textContent = loadingMessages[messageIndex];
+            messageIndex++;
+        }
+    }, 400);
+    
+    // Hide loading screen after 3 seconds
+    setTimeout(() => {
+        clearInterval(messageInterval);
+        
+        // Fade out loading screen
+        loadingScreen.classList.add('fade-out');
+        
+        // Show game container
+        setTimeout(() => {
+            gameContainer.classList.add('show');
+            document.body.style.overflow = 'visible'; // Re-enable scrolling
+        }, 250);
+        
+        // Remove loading screen from DOM after transition
+        setTimeout(() => {
+            loadingScreen.remove();
+        }, 500);
+        
+    }, 3000);
+});

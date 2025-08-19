@@ -254,3 +254,5 @@ demos/
 # Version-specific files
 version-*.html
 release-notes-*.md
+blog-aws-cli-beginners.md
+
