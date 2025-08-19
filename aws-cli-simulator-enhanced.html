@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS CLI Scavenger Hunt - Enhanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .terminal {
+            width: 100%;
+            max-width: 1200px;
+            height: 85vh;
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background-color: #3c3c3c;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .control.red { background-color: #ff5f56; }
+        .control.yellow { background-color: #ffbd2e; }
+        .control.green { background-color: #27ca3f; }
+
+        .terminal-title {
+            margin-left: 15px;
+            font-size: 14px;
+            color: #cccccc;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background-color: #555;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #cccccc;
+            min-width: 60px;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 5px;
+            margin-left: 15px;
+        }
+
+        .difficulty-btn {
+            padding: 4px 8px;
+            background-color: #555;
+            border: none;
+            color: #fff;
+            font-size: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+
+        .difficulty-btn.active {
+            background-color: #4CAF50;
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output {
+            flex: 1;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .command-line {
+            margin-bottom: 10px;
+        }
+
+        .prompt {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .user-input {
+            color: #ffffff;
+        }
+
+        .aws-output {
+            color: #e0e0e0;
+            margin-left: 0;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            color: #ff6b6b;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .clue {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
+        .hint {
+            color: #ff9800;
+            font-style: italic;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-left: 3px solid #ff9800;
+            margin: 10px 0;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .input-prompt {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        #command-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: -200px;
+            left: 120px;
+            background-color: #3c3c3c;
+            border: 1px solid #555;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            min-width: 300px;
+        }
+
+        .autocomplete-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background-color: #4CAF50;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .json-output {
+            color: #87CEEB;
+        }
+
+        .congratulations {
+            color: #ffd93d;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .reset-button, .hint-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            margin: 10px auto;
+            display: block;
+        }
+
+        .hint-button {
+            background-color: #ff9800;
+            margin: 10px 0;
+        }
+
+        .reset-button:hover {
+            background-color: #45a049;
+        }
+
+        .hint-button:hover {
+            background-color: #f57c00;
+        }
+
+        .stats-panel {
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .achievement {
+            color: #ffd93d;
+            font-weight: bold;
+            text-align: center;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="header-left">
+                <div class="window-controls">
+                    <div class="control red"></div>
+                    <div class="control yellow"></div>
+                    <div class="control green"></div>
+                </div>
+                <div class="terminal-title">AWS CLI Scavenger Hunt</div>
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                    <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                    <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0/6</div>
+            </div>
+        </div>
+        <div class="terminal-body">
+            <div class="output" id="output">
+                <div class="clue">🔍 Welcome to the AWS CLI Scavenger Hunt! 🔍</div>
+                <div class="aws-output">
+Your mission: Navigate through AWS services using CLI commands to find hidden clues.
+Each correct command will reveal the next step in your journey.
+
+<span class="success">💡 Tips:</span>
+• Use Tab for command auto-completion
+• Use ↑/↓ arrows for command history
+• Type 'help' for available commands
+• Get hints after 3 failed attempts
+
+<span class="clue">Clue 1: The S3 Riddle</span>
+Three buckets hold the key, but only one contains what you seek.
+List the S3 buckets to begin your quest...
+                </div>
+            </div>
+            <div class="input-container">
+                <span class="input-prompt">user@cli-hunt:~$</span>
+                <input type="text" id="command-input" autocomplete="off" autofocus>
+                <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentClue = 0;
+        let currentDifficulty = 'beginner';
+        let commandHistory = [];
+        let historyIndex = -1;
+        let failedAttempts = 0;
+        let totalAttempts = 0;
+        let hintsUsed = 0;
+        let startTime = Date.now();
+        let selectedAutocompleteIndex = -1;
+
+        const output = document.getElementById('output');
+        const commandInput = document.getElementById('command-input');
+        const autocompleteDropdown = document.getElementById('autocomplete-dropdown');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+
+        // AWS CLI commands for autocomplete
+        const awsCommands = [
+            'aws s3 ls',
+            'aws s3 ls s3://',
+            'aws s3 cp s3:// .',
+            'aws s3 cp s3://clue-bucket-1/clue.txt .',
+            'aws ssm get-parameter --name ',
+            'aws ssm get-parameter --name /scavenger-hunt/clue-2',
+            'aws iam list-attached-user-policies --user-name ',
+            'aws iam list-attached-user-policies --user-name the-hidden-user',
+            'aws iam get-policy-version --policy-arn ',
+            'aws iam get-policy-version --policy-arn arn:aws:iam::123456789012:policy/ScavengerHuntPolicy --version-id v1',
+            'cat clue.txt',
+            'help',
+            'clear'
+        ];
+
+        // Game data structure with difficulty levels
+        const gameStages = {
+            beginner: [
+                {
+                    expectedCommand: 'aws s3 ls',
+                    output: `2023-08-19 12:34:56 my-app-bucket
+2023-08-19 12:35:12 clue-bucket-1
+2023-08-19 12:35:28 backup-storage-bucket`,
+                    nextClue: `<span class="clue">Clue 2: The S3 File</span>
+I see you found the clue-bucket-1! Now look inside it.
+What secrets does this bucket contain?`,
+                    hint: "Try using 'aws s3 ls' to list all S3 buckets in your account."
+                },
+                {
+                    expectedCommand: 'aws s3 ls s3://clue-bucket-1',
+                    output: `2023-08-19 12:36:45        156 clue.txt`,
+                    nextClue: `<span class="clue">Clue 3: The Hidden Message</span>
+A single file awaits! Download it to reveal the next step.
+(Hint: You can use 'aws s3 cp' or 'cat' to read the contents)`,
+                    hint: "Use 'aws s3 ls s3://clue-bucket-1' to see what's inside the bucket."
+                },
+                {
+                    expectedCommand: ['aws s3 cp s3://clue-bucket-1/clue.txt .', 'cat clue.txt', 'aws s3 cp s3://clue-bucket-1/clue.txt'],
+                    output: `Found it! Your next clue is hidden in the SSM Parameter Store.
+The parameter name is: /scavenger-hunt/clue-2
+
+Look for the secret that holds the identity of a hidden user...`,
+                    nextClue: `<span class="clue">Clue 4: The SSM Secret</span>
+The Systems Manager Parameter Store holds many secrets.
+Retrieve the parameter to discover the next piece of the puzzle!`,
+                    hint: "Download the file with 'aws s3 cp s3://clue-bucket-1/clue.txt .' or read it with 'cat clue.txt'."
+                },
+                {
+                    expectedCommand: 'aws ssm get-parameter --name /scavenger-hunt/clue-2',
+                    output: `{
+    "Parameter": {
+        "Name": "/scavenger-hunt/clue-2",
+        "Type": "String",
+        "Value": "arn:aws:iam::123456789012:user/the-hidden-user",
+        "Version": 1,
+        "LastModifiedDate": "2023-08-19T12:40:00.000000+00:00",
+        "ARN": "arn:aws:ssm:us-east-1:123456789012:parameter/scavenger-hunt/clue-2"
+    }
+}`,
+                    nextClue: `<span class="clue">Clue 5: The IAM Identity</span>
+You've discovered the ARN of a hidden user: 'the-hidden-user'
+What policies are attached to this mysterious identity?`,
+                    hint: "Use 'aws ssm get-parameter --name /scavenger-hunt/clue-2' to retrieve the parameter value."
+                },
+                {
+                    expectedCommand: 'aws iam list-attached-user-policies --user-name the-hidden-user',
+                    output: `{
+    "AttachedPolicies": [
+        {
+            "PolicyName": "ScavengerHuntPolicy",
+            "PolicyArn": "arn:aws:iam::123456789012:policy/ScavengerHuntPolicy"
+        }
+    ]
+}`,
+                    nextClue: `<span class="clue">Final Clue: The Policy Document</span>
+One last step! Examine the policy document to complete your quest.
+Get the policy version to reveal the final secret!`,
+                    hint: "List attached policies with 'aws iam list-attached-user-policies --user-name the-hidden-user'."
+                },
+                {
+                    expectedCommand: 'aws iam get-policy-version --policy-arn arn:aws:iam::123456789012:policy/ScavengerHuntPolicy --version-id v1',
+                    output: `{
+    "PolicyVersion": {
+        "Document": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::treasure-bucket/*",
+                    "Condition": {
+                        "StringEquals": {
+                            "s3:ExistingObjectTag/SecretCode": "CONGRATULATIONS_HUNTER_2023"
+                        }
+                    }
+                }
+            ]
+        },
+        "VersionId": "v1",
+        "IsDefaultVersion": true,
+        "CreateDate": "2023-08-19T12:45:00.000000+00:00"
+    }
+}`,
+                    nextClue: null,
+                    isComplete: true,
+                    hint: "Get the policy version with 'aws iam get-policy-version --policy-arn arn:aws:iam::123456789012:policy/ScavengerHuntPolicy --version-id v1'."
+                }
+            ],
+            intermediate: [
+                // Similar structure but with more complex commands and less guidance
+                {
+                    expectedCommand: ['aws s3 ls --recursive', 'aws s3 ls'],
+                    output: `2023-08-19 12:34:56 my-app-bucket
+2023-08-19 12:35:12 clue-bucket-1
+2023-08-19 12:35:28 backup-storage-bucket
+2023-08-19 12:35:45 logs-bucket-encrypted`,
+                    nextClue: `<span class="clue">Clue 2: The Encrypted Bucket</span>
+Multiple buckets exist, but one holds encrypted logs. Find the right bucket and explore its contents.`,
+                    hint: "List S3 buckets and look for one that might contain logs or clues."
+                }
+                // Add more intermediate stages...
+            ],
+            advanced: [
+                // Advanced level with minimal hints and complex scenarios
+                {
+                    expectedCommand: ['aws s3api list-buckets --query "Buckets[?contains(Name, `clue`)]"', 'aws s3 ls'],
+                    output: `{
+    "Buckets": [
+        {
+            "Name": "clue-bucket-1",
+            "CreationDate": "2023-08-19T12:35:12.000Z"
+        }
+    ]
+}`,
+                    nextClue: `<span class="clue">Advanced Challenge</span>
+Use advanced AWS CLI queries and filters to navigate efficiently.`,
+                    hint: "Use AWS CLI queries and JMESPath to filter results efficiently."
+                }
+                // Add more advanced stages...
+            ]
+        };
+
+        function updateProgress() {
+            const totalStages = gameStages[currentDifficulty].length;
+            const progress = (currentClue / totalStages) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${currentClue}/${totalStages}`;
+        }
+
+        function addToOutput(content, className = '') {
+            const div = document.createElement('div');
+            div.className = `command-line ${className}`;
+            div.innerHTML = content;
+            output.appendChild(div);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function showHint() {
+            const currentStage = gameStages[currentDifficulty][currentClue];
+            if (currentStage && currentStage.hint) {
+                addToOutput(`<div class="hint">💡 Hint: ${currentStage.hint}</div>`);
+                hintsUsed++;
+            }
+        }
+
+        function showAutocomplete(input) {
+            const matches = awsCommands.filter(cmd => 
+                cmd.toLowerCase().startsWith(input.toLowerCase()) && input.length > 0
+            );
+
+            if (matches.length === 0 || input.length === 0) {
+                autocompleteDropdown.style.display = 'none';
+                return;
+            }
+
+            autocompleteDropdown.innerHTML = '';
+            matches.forEach((match, index) => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.textContent = match;
+                item.addEventListener('click', () => {
+                    commandInput.value = match;
+                    autocompleteDropdown.style.display = 'none';
+                    commandInput.focus();
+                });
+                autocompleteDropdown.appendChild(item);
+            });
+
+            autocompleteDropdown.style.display = 'block';
+            selectedAutocompleteIndex = -1;
+        }
+
+        function processCommand(command) {
+            totalAttempts++;
+            
+            // Add to command history
+            if (command.trim() && commandHistory[commandHistory.length - 1] !== command) {
+                commandHistory.push(command);
+            }
+            historyIndex = commandHistory.length;
+
+            // Add user command to output
+            addToOutput(`<span class="prompt">user@cli-hunt:~$</span> <span class="user-input">${command}</span>`);
+
+            // Handle special commands
+            if (command.trim().toLowerCase() === 'help') {
+                addToOutput(`<span class="aws-output">Available commands:
+• aws s3 ls [bucket-name] - List S3 buckets or bucket contents
+• aws s3 cp &lt;source&gt; &lt;destination&gt; - Copy files from S3
+• aws ssm get-parameter --name &lt;parameter-name&gt; - Get SSM parameter
+• aws iam list-attached-user-policies --user-name &lt;username&gt; - List IAM policies
+• aws iam get-policy-version --policy-arn &lt;arn&gt; --version-id &lt;version&gt; - Get policy document
+• cat &lt;filename&gt; - Display file contents
+• clear - Clear the terminal
+• help - Show this help message
+
+Use Tab for auto-completion, ↑/↓ for command history.</span>`);
+                return;
+            }
+
+            if (command.trim().toLowerCase() === 'clear') {
+                output.innerHTML = '';
+                return;
+            }
+
+            if (currentClue >= gameStages[currentDifficulty].length) {
+                addToOutput('Game completed! Use the reset button to play again.', 'error');
+                return;
+            }
+
+            const currentStage = gameStages[currentDifficulty][currentClue];
+            let commandMatches = false;
+
+            // Check if command matches expected command(s)
+            if (Array.isArray(currentStage.expectedCommand)) {
+                commandMatches = currentStage.expectedCommand.some(cmd => 
+                    command.trim().toLowerCase() === cmd.toLowerCase()
+                );
+            } else {
+                commandMatches = command.trim().toLowerCase() === currentStage.expectedCommand.toLowerCase();
+            }
+
+            if (commandMatches) {
+                // Correct command - reset failed attempts
+                failedAttempts = 0;
+                
+                // Show output
+                addToOutput(`<span class="aws-output json-output">${currentStage.output}</span>`);
+                
+                if (currentStage.isComplete) {
+                    // Game completed
+                    const completionTime = Math.round((Date.now() - startTime) / 1000);
+                    const efficiency = Math.round(((gameStages[currentDifficulty].length / totalAttempts) * 100));
+                    
+                    addToOutput(`
+<div class="congratulations">
+🎉 CONGRATULATIONS! 🎉
+You've successfully completed the ${currentDifficulty.toUpperCase()} AWS CLI Scavenger Hunt!
+
+You discovered the secret code: CONGRATULATIONS_HUNTER_2023
+</div>
+
+<div class="stats-panel">
+📊 Your Stats:
+• Completion Time: ${completionTime} seconds
+• Total Attempts: ${totalAttempts}
+• Efficiency: ${efficiency}%
+• Hints Used: ${hintsUsed}
+• Difficulty: ${currentDifficulty.toUpperCase()}
+</div>`, 'success');
+
+                    // Show achievements
+                    if (efficiency > 90) {
+                        addToOutput(`<div class="achievement">🏆 ACHIEVEMENT: Perfect Navigator! (90%+ efficiency)</div>`);
+                    }
+                    if (hintsUsed === 0) {
+                        addToOutput(`<div class="achievement">🧠 ACHIEVEMENT: No Hints Needed!</div>`);
+                    }
+                    if (completionTime < 120) {
+                        addToOutput(`<div class="achievement">⚡ ACHIEVEMENT: Speed Demon! (Under 2 minutes)</div>`);
+                    }
+                    
+                    const resetBtn = document.createElement('button');
+                    resetBtn.className = 'reset-button';
+                    resetBtn.textContent = 'Start New Hunt';
+                    resetBtn.onclick = resetGame;
+                    output.appendChild(resetBtn);
+                } else {
+                    // Show next clue
+                    if (currentStage.nextClue) {
+                        addToOutput(`<span class="aws-output">${currentStage.nextClue}</span>`);
+                    }
+                    currentClue++;
+                    updateProgress();
+                }
+            } else {
+                // Incorrect command
+                failedAttempts++;
+                
+                let errorMessage = `aws: error: argument operation: Invalid choice, valid choices are:
+
+Common AWS CLI commands for this hunt:
+• aws s3 ls [bucket-name]
+• aws s3 cp <source> <destination>
+• aws ssm get-parameter --name <parameter-name>
+• aws iam list-attached-user-policies --user-name <username>
+• aws iam get-policy-version --policy-arn <arn> --version-id <version>
+
+Try again with the correct command for your current clue!`;
+
+                if (failedAttempts >= 3) {
+                    const hintBtn = document.createElement('button');
+                    hintBtn.className = 'hint-button';
+                    hintBtn.textContent = '💡 Get Hint';
+                    hintBtn.onclick = showHint;
+                    
+                    errorMessage += `\n\n🤔 Having trouble? A hint is now available!`;
+                    addToOutput(errorMessage, 'error');
+                    output.appendChild(hintBtn);
+                } else {
+                    addToOutput(errorMessage, 'error');
+                }
+            }
+        }
+
+        function resetGame() {
+            currentClue = 0;
+            failedAttempts = 0;
+            totalAttempts = 0;
+            hintsUsed = 0;
+            startTime = Date.now();
+            commandHistory = [];
+            historyIndex = -1;
+            
+            output.innerHTML = `
+                <div class="clue">🔍 Welcome to the AWS CLI Scavenger Hunt! 🔍</div>
+                <div class="aws-output">
+Your mission: Navigate through AWS services using CLI commands to find hidden clues.
+Each correct command will reveal the next step in your journey.
+
+<span class="success">💡 Tips:</span>
+• Use Tab for command auto-completion
+• Use ↑/↓ arrows for command history
+• Type 'help' for available commands
+• Get hints after 3 failed attempts
+
+<span class="clue">Clue 1: The S3 Riddle</span>
+Three buckets hold the key, but only one contains what you seek.
+List the S3 buckets to begin your quest...
+                </div>
+            `;
+            updateProgress();
+            commandInput.focus();
+        }
+
+        // Event listeners
+        commandInput.addEventListener('input', function(e) {
+            showAutocomplete(e.target.value);
+        });
+
+        commandInput.addEventListener('keydown', function(e) {
+            const dropdown = autocompleteDropdown;
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+
+            if (e.key === 'Tab' && items.length > 0) {
+                e.preventDefault();
+                if (selectedAutocompleteIndex >= 0) {
+                    commandInput.value = items[selectedAutocompleteIndex].textContent;
+                } else {
+                    commandInput.value = items[0].textContent;
+                }
+                dropdown.style.display = 'none';
+            } else if (e.key === 'ArrowDown' && items.length > 0) {
+                e.preventDefault();
+                selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, items.length - 1);
+                items.forEach((item, index) => {
+                    item.classList.toggle('selected', index === selectedAutocompleteIndex);
+                });
+            } else if (e.key === 'ArrowUp' && items.length > 0) {
+                e.preventDefault();
+                selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, 0);
+                items.forEach((item, index) => {
+                    item.classList.toggle('selected', index === selectedAutocompleteIndex);
+                });
+            } else if (e.key === 'ArrowUp' && dropdown.style.display === 'none') {
+                // Command history - up
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    commandInput.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown' && dropdown.style.display === 'none') {
+                // Command history - down
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    commandInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    commandInput.value = '';
+                }
+            } else if (e.key === 'Enter') {
+                const command = commandInput.value.trim();
+                if (command) {
+                    processCommand(command);
+                    commandInput.value = '';
+                    dropdown.style.display = 'none';
+                }
+            } else if (e.key === 'Escape') {
+                dropdown.style.display = 'none';
+                selectedAutocompleteIndex = -1;
+            }
+        });
+
+        // Difficulty selector
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentDifficulty = this.dataset.level;
+                resetGame();
+            });
+        });
+
+        // Focus input when clicking anywhere in terminal
+        document.querySelector('.terminal-body').addEventListener('click', function() {
+            commandInput.focus();
+        });
+
+        // Hide autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.input-container')) {
+                autocompleteDropdown.style.display = 'none';
+            }
+        });
+
+        // Initialize
+        updateProgress();
+        commandInput.focus();
+    </script>
+</body>
+</html>

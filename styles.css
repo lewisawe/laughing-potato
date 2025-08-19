@@ -1,0 +1,586 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Terminal Container */
+.terminal {
+    width: 100%;
+    max-width: 1200px;
+    height: 85vh;
+    background-color: #2d2d2d;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Terminal Header */
+.terminal-header {
+    background-color: #3c3c3c;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px 10px 0 0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.control.red { 
+    background-color: #ff5f56; 
+}
+
+.control.yellow { 
+    background-color: #ffbd2e; 
+}
+
+.control.green { 
+    background-color: #27ca3f; 
+}
+
+.terminal-title {
+    margin-left: 15px;
+    font-size: 14px;
+    color: #cccccc;
+}
+
+/* Progress Bar */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar {
+    width: 200px;
+    height: 8px;
+    background-color: #555;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: #cccccc;
+    min-width: 60px;
+}
+
+/* Difficulty Selector */
+.difficulty-selector {
+    display: flex;
+    gap: 5px;
+    margin-left: 15px;
+}
+
+.difficulty-btn {
+    padding: 4px 8px;
+    background-color: #555;
+    border: none;
+    color: #fff;
+    font-size: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: background-color 0.3s ease;
+}
+
+.difficulty-btn:hover {
+    background-color: #666;
+}
+
+.difficulty-btn.active {
+    background-color: #4CAF50;
+}
+
+/* Terminal Body */
+.terminal-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+}
+
+.output {
+    flex: 1;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    overflow-anchor: none; /* Prevent scroll anchoring issues */
+}
+
+.command-line {
+    margin-bottom: 10px;
+}
+
+/* Text Styling */
+.prompt {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.user-input {
+    color: #ffffff;
+}
+
+.aws-output {
+    color: #e0e0e0;
+    margin-left: 0;
+    white-space: pre-wrap;
+}
+
+.error {
+    color: #ff6b6b;
+}
+
+.success {
+    color: #4CAF50;
+}
+
+.clue {
+    color: #ffd93d;
+    font-weight: bold;
+}
+
+.hint {
+    color: #ff9800;
+    font-style: italic;
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-left: 3px solid #ff9800;
+    margin: 10px 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.json-output {
+    color: #87CEEB;
+}
+
+.congratulations {
+    color: #ffd93d;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Input Container */
+.input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-prompt {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#command-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    outline: none;
+    caret-color: #4CAF50;
+}
+
+#command-input::selection {
+    background-color: #4CAF50;
+    color: #000;
+}
+
+/* Autocomplete Dropdown */
+.autocomplete-dropdown {
+    position: absolute;
+    top: -200px;
+    left: 120px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    min-width: 300px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #555;
+    transition: background-color 0.2s ease;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background-color: #4CAF50;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+/* Buttons */
+.reset-button, 
+.hint-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    margin: 10px auto;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.hint-button {
+    background-color: #ff9800;
+    margin: 10px 0;
+}
+
+.reset-button:hover {
+    background-color: #45a049;
+}
+
+.hint-button:hover {
+    background-color: #f57c00;
+}
+
+/* Stats and Achievements */
+.stats-panel {
+    background-color: #2a2a2a;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 12px;
+    border-left: 3px solid #4CAF50;
+}
+
+.achievement {
+    color: #ffd93d;
+    font-weight: bold;
+    text-align: center;
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border-left: 3px solid #ffd93d;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(255, 217, 61, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+    }
+}
+
+/* Scrollbar Styling */
+.terminal-body::-webkit-scrollbar,
+.autocomplete-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track,
+.autocomplete-dropdown::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.terminal-body::-webkit-scrollbar-thumb,
+.autocomplete-dropdown::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover,
+.autocomplete-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .terminal {
+        height: 90vh;
+        max-width: 100%;
+    }
+    
+    .terminal-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .progress-container {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .progress-bar {
+        flex: 1;
+        margin-right: 10px;
+    }
+    
+    .difficulty-selector {
+        margin-left: 0;
+    }
+    
+    .autocomplete-dropdown {
+        left: 0;
+        right: 0;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .terminal-body {
+        padding: 15px;
+    }
+    
+    .difficulty-btn {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+    
+    .terminal-title {
+        font-size: 12px;
+    }
+}
+
+/* CLI Enhancement Styles */
+.typing-animation {
+    overflow: hidden;
+    border-right: 2px solid #4CAF50;
+    white-space: nowrap;
+    animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: #4CAF50; }
+}
+
+.command-executing {
+    color: #ffeb3b;
+}
+
+.command-executing::after {
+    content: " ⏳";
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Enhanced autocomplete */
+.autocomplete-dropdown {
+    position: absolute;
+    top: -200px;
+    left: 120px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    min-width: 300px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #555;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background-color: #4CAF50;
+    transform: translateX(5px);
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item .shortcut {
+    font-size: 10px;
+    color: #999;
+    background-color: #555;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.autocomplete-item.selected .shortcut {
+    background-color: #2e7d32;
+    color: #fff;
+}
+
+/* Command suggestions */
+.command-suggestion {
+    color: #666;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-success { background-color: #4CAF50; }
+.status-error { background-color: #f44336; }
+.status-warning { background-color: #ff9800; }
+.status-info { background-color: #2196f3; }
+
+/* Enhanced prompt */
+.input-prompt {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-right: 10px;
+    position: relative;
+}
+
+.input-prompt::before {
+    content: "";
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Show different state when input is focused */
+.input-container:focus-within .input-prompt::before {
+    background-color: #8BC34A;
+    animation: none;
+}
+
+.input-container:focus-within .input-prompt {
+    color: #8BC34A;
+}
+
+/* Add a subtle hint when terminal is ready */
+.input-container:not(:focus-within)::after {
+    content: "Click here to start typing...";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 12px;
+    font-style: italic;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Loading states */
+.loading-dots::after {
+    content: "";
+    animation: loadingDots 1.5s infinite;
+}
+
+@keyframes loadingDots {
+    0%, 20% { content: ""; }
+    40% { content: "."; }
+    60% { content: ".."; }
+    80%, 100% { content: "..."; }
+}

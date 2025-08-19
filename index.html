@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS CLI Scavenger Hunt</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Buy Me a Coffee Widget -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="lewisawe" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF5F5F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="header-left">
+                <div class="window-controls">
+                    <div class="control red"></div>
+                    <div class="control yellow"></div>
+                    <div class="control green"></div>
+                </div>
+                <div class="terminal-title">AWS CLI Scavenger Hunt</div>
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                    <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                    <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                    <button class="difficulty-btn" data-level="expert">Expert</button>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0/6</div>
+            </div>
+        </div>
+        <div class="terminal-body">
+            <div class="output" id="output">
+                <div class="clue">🔍 Welcome to the AWS CLI Scavenger Hunt! 🔍</div>
+                <div class="aws-output">
+Your mission: Navigate through AWS services using CLI commands to find hidden clues.
+Each correct command will reveal the next step in your journey.
+
+
+<span class="clue">Clue 1: The S3 Riddle</span>
+Three buckets hold the key, but only one contains what you seek.
+List the S3 buckets to begin your quest...
+                </div>
+            </div>
+            <div class="input-container">
+                <span class="input-prompt">user@cli-hunt:~$</span>
+                <input type="text" id="command-input" autocomplete="off" autofocus placeholder="Type your AWS CLI command here...">
+                <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

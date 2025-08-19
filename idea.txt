@@ -1,0 +1,93 @@
+You want a more detailed breakdown of the prompt for a web-based AWS CLI simulator so a developer can understand the full scope of the project. Here's a complete specification covering the user interface, core functionality, and the full game logic.
+
+Project Overview
+
+The goal is to build a self-contained web application that simulates an AWS CLI terminal. This application will not connect to any real AWS services. Instead, it will use JavaScript to recognize specific commands typed by the user and respond with pre-scripted, formatted output. The user's goal is to complete a "Serverless Scavenger Hunt" by correctly navigating through a series of "clues" presented in the simulated terminal.
+
+The entire application should be contained within a single HTML file, using inline CSS for styling and a single <script> tag for the game logic.
+
+User Interface (UI) Requirements
+
+The UI should resemble a modern command-line interface.
+
+    Terminal Window: A large, rectangular container that holds all the content. It should have a dark, clean theme, similar to a code editor or a real terminal. The corners should be slightly rounded.
+
+    Header: A simple header at the top of the terminal, possibly with decorative dots (red, yellow, green) to mimic window controls.
+
+    Output Area: This is the main body of the terminal. It should be a <div> element that can be scrolled. This is where all the simulated command outputs and game prompts will appear. The text should use a monospace font.
+
+    Command Prompt & Input: A static prompt like user@cli-hunt $ followed by a text input field. The input field should be the only interactive element for the user, and it should automatically gain focus when the page loads.
+
+Core Functionality
+
+The JavaScript logic will manage the game state and handle all user interaction.
+
+    Event Listener: The application must listen for the Enter key press in the input field.
+
+    Command Validation: When a command is submitted, the script will:
+
+        Capture the user's input.
+
+        Append the user's command to the output area.
+
+        Compare the input against a pre-defined list of correct commands for the current stage of the game.
+
+    Game State Management: A variable (e.g., let currentClue = 0;) will track the user's progress. This variable will determine which command is the "correct" one and what output to display.
+
+    Output Display:
+
+        If the user's input matches the correct command for the current stage, the script will:
+
+            Append the corresponding pre-scripted output (including any JSON data or text) to the output area.
+
+            Increment the currentClue variable to advance the game.
+
+            Clear the input field.
+
+            Scroll the output area to the bottom to show the latest response.
+
+        If the user's input does not match the correct command, the script will:
+
+            Append a generic "command not found" error message, such as 'aws: error: an unrecognized command was supplied'.
+
+            Clear the input field.
+
+            Leave the currentClue variable unchanged.
+
+The Scavenger Hunt Game Flow
+
+The game is a linear progression through a series of clues.
+
+    Initial State: The terminal starts with a welcome message and a prompt for Clue 1.
+
+    Clue 1: The S3 Riddle
+
+        User must type: aws s3 ls
+
+        Correct Output: A list of three S3 buckets, one of which is named clue-bucket-1.
+
+    Clue 2: The S3 File
+
+        User must type: aws s3 ls s3://clue-bucket-1
+
+        Correct Output: A single file named clue.txt is displayed in the bucket.
+
+    Clue 3: The clue.txt Content
+
+        User must type: aws s3 cp s3://clue-bucket-1/clue.txt . (to simulate downloading the file, a cat command is also acceptable)
+
+        Correct Output: The content of the file, which is the next clue and a parameter name. Example: 'Found it! Your next clue is in the SSM Parameter Store. The name is: /scavenger-hunt/clue-2'.
+
+    Clue 4: The SSM Secret
+
+        User must type: aws ssm get-parameter --name /scavenger-hunt/clue-2
+
+        Correct Output: A JSON response with the Value field containing the ARN of an IAM user.
+
+    Clue 5: The IAM Identity
+
+        User must type: aws iam list-attached-user-policies --user-name the-hidden-user
+
+        Correct Output: A JSON response listing a single policy. The user must then use a follow-up command to get the policy document itself.
+
+    Final Clue: The final command will lead to a congratulatory message, completing the hunt. The game should then reset, or provide a concluding message.
